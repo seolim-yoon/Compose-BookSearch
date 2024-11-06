@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 
 
@@ -15,7 +16,8 @@ data class BookTypography(
     val title16: TextStyle = TextStyle.Default,
     val body18: TextStyle = TextStyle.Default,
     val body16: TextStyle = TextStyle.Default,
-    val body14: TextStyle = TextStyle.Default
+    val body14: TextStyle = TextStyle.Default,
+    val strikeBody14: TextStyle = TextStyle.Default
 )
 
 val Typography = BookTypography(
@@ -53,6 +55,12 @@ val Typography = BookTypography(
         fontSize = 14.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 20.sp
+    ),
+    strikeBody14 = TextStyle(
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 20.sp,
+        textDecoration = TextDecoration.LineThrough
     )
 )
 

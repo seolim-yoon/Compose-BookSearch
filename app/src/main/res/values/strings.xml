@@ -2,6 +2,7 @@
     <string name="app_name">Compose-BookSearch</string>
     <string name="price_won">%,d원</string>
     <string name="total_count">검색 결과 : 총 %,d개</string>
+    <string name="discount_percent">%d%%</string>
     <string name="search_place_holder">검색어를 입력하세요.</string>
     <string name="search">검색</string>
     <string name="refresh">새로고침</string>

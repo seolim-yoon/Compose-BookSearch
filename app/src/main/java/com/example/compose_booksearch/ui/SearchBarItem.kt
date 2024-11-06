@@ -53,6 +53,12 @@ internal fun SearchBarItem(
                     text = stringResource(R.string.search_place_holder)
                 )
             },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = null
+                )
+            },
             trailingIcon = {
                 IconButton(
                     onClick = onClickClearBtn
@@ -72,25 +78,21 @@ internal fun SearchBarItem(
             modifier = Modifier.weight(1f)
         )
 
-        Row(
+        Text(
+            text = stringResource(R.string.search),
+            style = BookProgramAppTheme.typography.body14,
+            color = BookProgramAppTheme.colors.gray90,
             modifier = Modifier
                 .background(
-                    color = BookProgramAppTheme.colors.blue,
+                    color = BookProgramAppTheme.colors.oliveGreen,
                     shape = RoundedCornerShape(dimensionResource(R.dimen.radius_12dp))
                 )
                 .clickable { onClickSearchBtn(inputText) }
-                .padding(dimensionResource(R.dimen.padding_12dp))
-        ) {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = null
-            )
-            Text(
-                text = stringResource(R.string.search),
-                style = BookProgramAppTheme.typography.body14,
-                modifier = Modifier
-            )
-        }
+                .padding(
+                    vertical = dimensionResource(R.dimen.padding_16dp),
+                    horizontal = dimensionResource(R.dimen.padding_24dp)
+                )
+        )
     }
 }
 

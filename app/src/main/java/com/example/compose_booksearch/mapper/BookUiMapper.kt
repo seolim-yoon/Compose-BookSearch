@@ -12,14 +12,14 @@ class BookUiMapper @Inject constructor() {
             totalCount = document.meta.totalCount
 
         )
-    fun mapToBookUiModelList(bookEntityList: List<BookEntity.BookDocumentEntity>): List<BookUiModel> =
+    private fun mapToBookUiModelList(bookEntityList: List<BookEntity.BookDocumentEntity>): List<BookUiModel> =
         bookEntityList.mapIndexed { index, book ->
             BookUiModel(
                 id = index,
                 title = book.title,
                 contents = book.contents,
                 url = book.url,
-                authors = book.authors,
+                authors = book.authors.joinToString(", "),
                 publisher = book.publisher,
                 price = book.price,
                 salePrice = book.salePrice,

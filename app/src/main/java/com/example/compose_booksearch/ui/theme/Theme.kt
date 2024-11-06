@@ -10,15 +10,17 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Blue,
+    primary = OliveGreen,
     secondary = PurpleGrey80,
-    tertiary = Pink80
+    tertiary = Pink80,
+    background = SageGreen
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Blue,
+    primary = OliveGreen,
     secondary = PurpleGrey40,
-    tertiary = Pink40
+    tertiary = Pink40,
+    background = SageGreen
 )
 
 @Composable

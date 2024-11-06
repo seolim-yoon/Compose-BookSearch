@@ -5,7 +5,7 @@ data class BookUiModel(
     val title: String,
     val contents: String,
     val url: String,
-    val authors: List<String>,
+    val authors: String,
     val publisher: String,
     val price: Int,
     val salePrice: Int,

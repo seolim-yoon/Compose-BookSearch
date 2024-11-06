@@ -35,6 +35,7 @@ internal fun TotalCountItem(
         )
         Text(
             text = stringResource(R.string.total_count, totalCount),
+            color = BookProgramAppTheme.colors.gray90,
             style = BookProgramAppTheme.typography.title16
         )
     }

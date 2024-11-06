@@ -51,7 +51,7 @@ internal fun ErrorScreen(
             modifier = Modifier
                 .background(
                     shape = RoundedCornerShape(dimensionResource(R.dimen.radius_12dp)),
-                    color = BookProgramAppTheme.colors.blue
+                    color = BookProgramAppTheme.colors.oliveGreen
                 )
                 .clickable {
                     onRefresh()

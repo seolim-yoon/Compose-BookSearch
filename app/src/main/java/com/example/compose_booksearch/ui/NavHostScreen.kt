@@ -25,7 +25,7 @@ internal fun NavHostScreen(
                         ScreenType.DetailScreen(
                             imageUrl = book.thumbnail,
                             title = book.title,
-                            authors = book.authors.toString(),
+                            authors = book.authors,
                             contents = book.contents
                         )
                     )

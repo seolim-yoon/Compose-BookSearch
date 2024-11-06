@@ -38,6 +38,7 @@ internal fun DetailScreen(
         Text(
             text = book.title,
             style = BookProgramAppTheme.typography.title24,
+            color = BookProgramAppTheme.colors.gray90,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -45,6 +46,7 @@ internal fun DetailScreen(
         Text(
             text = book.authors,
             style = BookProgramAppTheme.typography.title20,
+            color = BookProgramAppTheme.colors.gray90,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -52,6 +54,7 @@ internal fun DetailScreen(
         Text(
             text = book.contents,
             style = BookProgramAppTheme.typography.body18,
+            color = BookProgramAppTheme.colors.gray50
         )
     }
 }

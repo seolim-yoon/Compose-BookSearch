@@ -1,5 +1,6 @@
 package com.example.compose_booksearch.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,12 +21,13 @@ import com.example.compose_booksearch.R
 import com.example.compose_booksearch.ui.theme.BookProgramAppTheme
 import com.example.compose_booksearch.ui.theme.ComposeBookSearchTheme
 import com.example.compose_booksearch.uimodel.BookUiModel
+import com.example.compose_booksearch.util.discountPercent
 
 
 @Composable
 internal fun BookItem(
     book: BookUiModel,
-    onClickBookItem:(BookUiModel) -> Unit
+    onClickBookItem: (BookUiModel) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(dimensionResource(R.dimen.radius_12dp)),
@@ -38,7 +40,11 @@ internal fun BookItem(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_12dp)),
-            modifier = Modifier.padding(dimensionResource(R.dimen.padding_12dp))
+            modifier = Modifier
+                .background(
+                    color = BookProgramAppTheme.colors.beige
+                )
+                .padding(dimensionResource(R.dimen.padding_12dp))
         ) {
             AsyncImageItem(
                 imgUrl = book.thumbnail,
@@ -57,6 +63,7 @@ internal fun BookItem(
                 Text(
                     text = book.contents,
                     style = BookProgramAppTheme.typography.body14,
+                    color = BookProgramAppTheme.colors.gray50,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -72,13 +79,15 @@ internal fun BookTitleInfo(
     Text(
         text = book.title,
         style = BookProgramAppTheme.typography.title18,
+        color = BookProgramAppTheme.colors.gray90,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis
     )
 
     Text(
-        text = book.authors.toString(),
+        text = book.authors,
         style = BookProgramAppTheme.typography.title16,
+        color = BookProgramAppTheme.colors.gray90,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis
     )
@@ -94,18 +103,33 @@ internal fun BookPriceInfo(
             space = dimensionResource(R.dimen.padding_4dp)
         )
     ) {
+        val isSale = book.salePrice != book.price
+
         Text(
             text = stringResource(R.string.price_won, book.price),
-            style = BookProgramAppTheme.typography.body14,
+            style = if (isSale) BookProgramAppTheme.typography.strikeBody14
+                  else BookProgramAppTheme.typography.body14,
+            color = BookProgramAppTheme.colors.gray90,
         )
-        Text(
-            text = stringResource(R.string.price_won, book.salePrice),
-            style = BookProgramAppTheme.typography.body14
-        )
-        Text(
-            text = "30%",
-            style = BookProgramAppTheme.typography.body14
-        )
+        if (isSale) {
+            Text(
+                text = stringResource(R.string.price_won, book.salePrice),
+                style = BookProgramAppTheme.typography.body14,
+                color = BookProgramAppTheme.colors.gray90,
+            )
+            Text(
+                text = stringResource(
+                    R.string.discount_percent,
+                    discountPercent(
+                        price = book.price.toDouble(),
+                        salePrice = book.salePrice.toDouble()
+                    )
+                ),
+                style = BookProgramAppTheme.typography.body16,
+                color = BookProgramAppTheme.colors.red,
+                modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_4dp))
+            )
+        }
     }
 }
 
@@ -119,7 +143,7 @@ private fun PreviewBookItem() {
                 title = "소년이 온다",
                 contents = "2014년 만해문학상, 2017년 이탈리아 말라파르테 문학상을 수상하고 전세계 20여개국에 번역 출간되며 세계를 사로잡은 우리 시대의 소설 『소년이 온다』.",
                 url = "https://product.kyobobook.co.kr/detail/S000000610612",
-                authors = listOf("한강"),
+                authors = "한강",
                 publisher = "창비",
                 price = 15000,
                 salePrice = 13500,
