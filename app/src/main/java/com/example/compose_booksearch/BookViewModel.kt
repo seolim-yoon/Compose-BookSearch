@@ -1,9 +1,11 @@
 package com.example.compose_booksearch
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.compose_booksearch.mapper.BookUiMapper
 import com.example.compose_booksearch.uimodel.BookUiModel
+import com.example.compose_booksearch.util.PAGE_SIZE
 import com.example.domain.usecase.SearchBookUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -30,6 +32,7 @@ class BookViewModel @Inject constructor(
 ): ViewModel() {
     private fun exceptionHandler(): CoroutineExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
+            Log.v("seolim", "e : " + throwable.message.toString())
             _loadState.update {
                 LoadState.Error(throwable)
             }
@@ -40,9 +43,6 @@ class BookViewModel @Inject constructor(
 
     private val _bookList: MutableStateFlow<List<BookUiModel>> = MutableStateFlow(listOf())
     val bookList = _bookList.asStateFlow()
-
-    private val _keyword: MutableStateFlow<String> = MutableStateFlow("")
-    val keyword = _keyword.asStateFlow()
 
     private var currentPage = 1
 
@@ -58,7 +58,7 @@ class BookViewModel @Inject constructor(
             val bookList = searchBookUseCase(
                 keyword = keyword,
                 page = currentPage,
-                pageSize = 0
+                pageSize = PAGE_SIZE
             )
 
             _bookList.update {

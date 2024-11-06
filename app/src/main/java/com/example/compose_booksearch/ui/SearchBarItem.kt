@@ -9,8 +9,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,8 +29,10 @@ import com.example.compose_booksearch.ui.theme.ComposeBookSearchTheme
 
 @Composable
 internal fun SearchBarItem(
-    keyword: String,
-    onClickSearchBtn: () -> Unit
+    inputText: String,
+    onValueChange: (String) -> Unit,
+    onClickSearchBtn: (String) -> Unit,
+    onClickClearBtn: () -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -38,12 +42,23 @@ internal fun SearchBarItem(
         modifier = Modifier.padding(dimensionResource(R.dimen.padding_12dp))
     ) {
         OutlinedTextField(
-            value = keyword,
-            onValueChange = {},
+            value = inputText,
+            onValueChange = onValueChange,
+            singleLine = true,
             placeholder = {
                 Text(
                     text = stringResource(R.string.search_place_holder)
                 )
+            },
+            trailingIcon = {
+                IconButton(
+                    onClick = onClickClearBtn
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Clear,
+                        contentDescription = null
+                    )
+                }
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(
@@ -58,10 +73,10 @@ internal fun SearchBarItem(
             modifier = Modifier
                 .background(
                     color = BookProgramAppTheme.colors.blue,
-                    shape = RoundedCornerShape(dimensionResource(R.dimen.radius_8dp))
+                    shape = RoundedCornerShape(dimensionResource(R.dimen.radius_12dp))
                 )
-                .clickable { onClickSearchBtn() }
-                .padding(dimensionResource(R.dimen.padding_8dp))
+                .clickable { onClickSearchBtn(inputText) }
+                .padding(dimensionResource(R.dimen.padding_12dp))
         ) {
             Icon(
                 imageVector = Icons.Default.Search,
@@ -81,8 +96,10 @@ internal fun SearchBarItem(
 private fun PreviewSearchBarItem() {
     ComposeBookSearchTheme {
         SearchBarItem(
-            keyword = "",
-            onClickSearchBtn = {  }
+            inputText = "",
+            onValueChange = { },
+            onClickSearchBtn = { },
+            onClickClearBtn = { }
         )
     }
 }

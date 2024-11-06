@@ -9,32 +9,32 @@ import androidx.compose.ui.unit.sp
 
 @Immutable
 data class BookTypography(
+    val title18: TextStyle = TextStyle.Default,
     val title16: TextStyle = TextStyle.Default,
-    val title14: TextStyle = TextStyle.Default,
-    val body14: TextStyle = TextStyle.Default,
-    val body12: TextStyle = TextStyle.Default
+    val body16: TextStyle = TextStyle.Default,
+    val body14: TextStyle = TextStyle.Default
 )
 
 val Typography = BookTypography(
+    title18 = TextStyle(
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold,
+        lineHeight = 24.sp
+    ),
     title16 = TextStyle(
         fontSize = 16.sp,
         fontWeight = FontWeight.Bold,
         lineHeight = 22.sp
     ),
-    title14 = TextStyle(
-        fontSize = 14.sp,
-        fontWeight = FontWeight.Bold,
-        lineHeight = 20.sp
+    body16 = TextStyle(
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 22.sp
     ),
     body14 = TextStyle(
         fontSize = 14.sp,
         fontWeight = FontWeight.Normal,
         lineHeight = 20.sp
-    ),
-    body12 = TextStyle(
-        fontSize = 12.sp,
-        fontWeight = FontWeight.Normal,
-        lineHeight = 18.sp
     )
 )
 

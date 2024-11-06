@@ -1,9 +1,12 @@
 package com.example.compose_booksearch.ui
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,23 +27,27 @@ import com.example.compose_booksearch.uimodel.BookUiModel
 
 @Composable
 internal fun BookItem(
-    book: BookUiModel
+    book: BookUiModel,
+    onClickBookItem:(BookUiModel) -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth()
-            .border(
-                width = dimensionResource(R.dimen.width_1dp),
-                color = BookProgramAppTheme.colors.gray30,
-                shape = RoundedCornerShape(dimensionResource(R.dimen.radius_8dp))
-            )
+        shape = RoundedCornerShape(dimensionResource(R.dimen.radius_12dp)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onClickBookItem(book)
+            }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(dimensionResource(R.dimen.padding_8dp))
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_12dp)),
+            modifier = Modifier.padding(dimensionResource(R.dimen.padding_12dp))
         ) {
             AsyncImageItem(
                 imgUrl = book.thumbnail,
-                modifier = Modifier.padding(dimensionResource(R.dimen.padding_8dp))
+                modifier = Modifier
+                    .fillMaxWidth(0.25f)
+                    .padding(dimensionResource(R.dimen.padding_4dp))
             )
 
             Column(
@@ -52,8 +59,8 @@ internal fun BookItem(
                 BookPriceInfo(book = book)
                 Text(
                     text = book.contents,
-                    style = BookProgramAppTheme.typography.body12,
-                    maxLines = 3,
+                    style = BookProgramAppTheme.typography.body14,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
             }
@@ -67,14 +74,14 @@ internal fun BookTitleInfo(
 ) {
     Text(
         text = book.title,
-        style = BookProgramAppTheme.typography.title16,
+        style = BookProgramAppTheme.typography.title18,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis
     )
 
     Text(
         text = book.authors.toString(),
-        style = BookProgramAppTheme.typography.title14,
+        style = BookProgramAppTheme.typography.title16,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis
     )
@@ -121,7 +128,8 @@ private fun PreviewBookItem() {
                 salePrice = 13500,
                 thumbnail = "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788936434120.jpg",
                 status = "판매중"
-            )
+            ),
+            onClickBookItem = {}
         )
     }
 }

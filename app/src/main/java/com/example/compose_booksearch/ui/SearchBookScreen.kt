@@ -1,5 +1,6 @@
 package com.example.compose_booksearch.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,6 +10,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,26 +23,30 @@ import com.example.compose_booksearch.uimodel.BookUiModel
 
 @Composable
 internal fun SearchBookScreen(
+    onClickBookItem:(BookUiModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val viewModel: BookViewModel = hiltViewModel()
     val onEvent = viewModel::onEvent
 
-    val keyword by viewModel.keyword.collectAsState()
     val bookList by viewModel.bookList.collectAsState()
 
+    var inputText by remember { mutableStateOf("") }
+
     Column(
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.radius_8dp)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_8dp)),
         modifier = modifier
     ) {
         SearchBarItem(
-            keyword = keyword,
-            onClickSearchBtn = { onEvent(UiEvent.SearchBook(keyword)) }
+            inputText = inputText,
+            onValueChange = { inputText = it },
+            onClickSearchBtn = { keyword -> onEvent(UiEvent.SearchBook(keyword)) },
+            onClickClearBtn = { inputText = ""}
         )
 
         LazyColumn(
-            contentPadding = PaddingValues(bottom = dimensionResource(R.dimen.padding_12dp)),
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_4dp)),
+            contentPadding = PaddingValues(dimensionResource(R.dimen.padding_16dp)),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_8dp)),
             modifier = Modifier
                 .fillMaxSize()
         ) {
@@ -47,7 +55,8 @@ internal fun SearchBookScreen(
                 items = bookList
             ) { book ->
                 BookItem(
-                    book = book
+                    book = book,
+                    onClickBookItem = onClickBookItem
                 )
             }
         }
