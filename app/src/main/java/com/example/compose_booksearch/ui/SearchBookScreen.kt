@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -20,8 +21,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.airbnb.mvrx.compose.collectAsState
+import com.airbnb.mvrx.compose.mavericksViewModel
 import com.example.compose_booksearch.BookViewModel
 import com.example.compose_booksearch.LoadState
 import com.example.compose_booksearch.R
@@ -33,12 +34,10 @@ internal fun SearchBookScreen(
     onClickBookItem:(BookUiModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val viewModel: BookViewModel = hiltViewModel()
+    val viewModel: BookViewModel = mavericksViewModel()
+    val state by viewModel.collectAsState()
     val onEvent = viewModel::onEvent
 
-    val loadState by viewModel.loadState.collectAsStateWithLifecycle()
-    val bookList by viewModel.bookList.collectAsStateWithLifecycle()
-    val totalCount by viewModel.totalCount.collectAsStateWithLifecycle()
 
     var inputKeyword by remember { mutableStateOf("") }
 
@@ -53,15 +52,15 @@ internal fun SearchBookScreen(
             onClickClearBtn = { inputKeyword = "" }
         )
 
-        if (totalCount > 0) {
+        if (state.totalCount > 0) {
             TotalCountItem(
-                totalCount = totalCount
+                totalCount = state.totalCount
             )
         }
 
         BookList(
-            loadState = loadState,
-            bookList = bookList,
+            loadState = state.loadState,
+            bookList = state.bookList,
             onClickBookItem = onClickBookItem,
             loadMoreItem = { onEvent(UiEvent.LoadMore) },
             onRefresh = { onEvent(UiEvent.Refresh) }
@@ -95,7 +94,9 @@ internal fun BookList(
 
     when (loadState) {
         is LoadState.Loading -> {
-            LinearProgressIndicator()
+            LinearProgressIndicator(
+                modifier = Modifier.fillMaxWidth()
+            )
         }
         is LoadState.Success -> {
             CompositionLocalProvider(LocalOverscrollConfiguration provides null)  {

@@ -16,6 +16,7 @@ hiltNavigation = "1.2.0"
 ksp = "2.0.21-1.0.25"
 coil = "2.7.0"
 navigation = "2.8.3"
+mavericks = "3.0.9"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,6 +52,11 @@ coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coi
 
 # Navigation
 navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation"}
+
+# Mavericks
+mvi-mavericks = { group = "com.airbnb.android", name = "mavericks", version.ref = "mavericks" }
+mvi-mavericks-hilt = { group = "com.airbnb.android", name = "mavericks-hilt", version.ref = "mavericks" }
+mvi-mavericks-compose = { group = "com.airbnb.android", name = "mavericks-compose", version.ref = "mavericks" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
