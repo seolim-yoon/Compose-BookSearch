@@ -17,6 +17,7 @@ import javax.inject.Inject
 sealed interface UiEvent {
     data class SearchBook(val keyword: String) : UiEvent
     data object Refresh : UiEvent
+    data object LoadMore : UiEvent
 }
 
 sealed interface LoadState {
@@ -29,7 +30,7 @@ sealed interface LoadState {
 class BookViewModel @Inject constructor(
     private val searchBookUseCase: SearchBookUseCase,
     private val bookUiMapper: BookUiMapper
-): ViewModel() {
+) : ViewModel() {
     private fun exceptionHandler(): CoroutineExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
             _loadState.update {
@@ -47,15 +48,18 @@ class BookViewModel @Inject constructor(
     val totalCount = _totalCount.asStateFlow()
 
     private var currentPage = 1
+    private var currentKeyword = ""
 
     private fun searchBookByName(
-        keyword: String,
-        page: Int
+        keyword: String
     ) {
         _loadState.update {
             LoadState.Loading
         }
         viewModelLaunch(onSuccess = {
+            currentPage = 1
+            currentKeyword = keyword
+
             val searchResult = bookUiMapper.mapToSearchResultUiModel(
                 searchBookUseCase(
                     keyword = keyword,
@@ -75,15 +79,39 @@ class BookViewModel @Inject constructor(
         })
     }
 
+    private fun loadMoreBookList(page: Int) {
+        viewModelLaunch(onSuccess = {
+            val moreBookList = bookUiMapper.mapToSearchResultUiModel(
+                searchBookUseCase(
+                    keyword = currentKeyword,
+                    page = page,
+                    pageSize = PAGE_SIZE
+                )
+            ).bookList
+
+            if (moreBookList.isNotEmpty()) {
+                _bookList.update {
+                    it.toMutableList().apply {
+                        addAll(moreBookList)
+                    }
+                }
+            }
+        })
+    }
+
     fun onEvent(event: UiEvent) {
         when (event) {
             is UiEvent.SearchBook -> {
-                searchBookByName(
-                    keyword = event.keyword,
-                    page = currentPage
-                )
+                searchBookByName(keyword = event.keyword)
             }
-            is UiEvent.Refresh -> {}
+
+            is UiEvent.Refresh -> {
+                searchBookByName(keyword = currentKeyword)
+            }
+
+            is UiEvent.LoadMore -> {
+                loadMoreBookList(++currentPage)
+            }
         }
     }
 

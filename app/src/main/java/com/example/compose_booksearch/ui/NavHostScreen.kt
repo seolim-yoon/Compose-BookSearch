@@ -19,7 +19,7 @@ internal fun NavHostScreen(
         modifier = modifier
     ) {
         composable<ScreenType.MainScreen> {
-            MainScreen(
+            SearchBookScreen(
                 onClickBookItem = { book ->
                     navController.navigate(
                         ScreenType.DetailScreen(

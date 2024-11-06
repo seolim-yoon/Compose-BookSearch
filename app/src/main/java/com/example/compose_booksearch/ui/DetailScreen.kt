@@ -23,13 +23,11 @@ import com.example.compose_booksearch.util.ScreenType
 internal fun DetailScreen(
     book: ScreenType.DetailScreen
 ) {
-    val scrollState = rememberScrollState()
-
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_8dp)),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
-            .verticalScroll(scrollState)
+            .verticalScroll(rememberScrollState())
             .padding(dimensionResource(R.dimen.padding_16dp))
     ) {
         AsyncImageItem(
