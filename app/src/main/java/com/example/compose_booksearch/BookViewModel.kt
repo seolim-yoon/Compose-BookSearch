@@ -1,6 +1,5 @@
 package com.example.compose_booksearch
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.compose_booksearch.mapper.BookUiMapper
@@ -17,6 +16,7 @@ import javax.inject.Inject
 
 sealed interface UiEvent {
     data class SearchBook(val keyword: String) : UiEvent
+    data object Refresh : UiEvent
 }
 
 sealed interface LoadState {
@@ -32,20 +32,21 @@ class BookViewModel @Inject constructor(
 ): ViewModel() {
     private fun exceptionHandler(): CoroutineExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
-            Log.v("seolim", "e : " + throwable.message.toString())
             _loadState.update {
                 LoadState.Error(throwable)
             }
         }
 
-    private val _loadState: MutableStateFlow<LoadState> = MutableStateFlow(LoadState.Loading)
+    private val _loadState: MutableStateFlow<LoadState> = MutableStateFlow(LoadState.Success)
     val loadState = _loadState.asStateFlow()
 
     private val _bookList: MutableStateFlow<List<BookUiModel>> = MutableStateFlow(listOf())
     val bookList = _bookList.asStateFlow()
 
-    private var currentPage = 1
+    private val _totalCount: MutableStateFlow<Int> = MutableStateFlow(0)
+    val totalCount = _totalCount.asStateFlow()
 
+    private var currentPage = 1
 
     private fun searchBookByName(
         keyword: String,
@@ -55,16 +56,21 @@ class BookViewModel @Inject constructor(
             LoadState.Loading
         }
         viewModelLaunch(onSuccess = {
-            val bookList = searchBookUseCase(
-                keyword = keyword,
-                page = currentPage,
-                pageSize = PAGE_SIZE
+            val searchResult = bookUiMapper.mapToSearchResultUiModel(
+                searchBookUseCase(
+                    keyword = keyword,
+                    page = currentPage,
+                    pageSize = PAGE_SIZE
+                )
             )
 
             _bookList.update {
                 mutableListOf<BookUiModel>().apply {
-                    addAll(bookUiMapper.mapToBookUiModelList(bookList))
+                    addAll(searchResult.bookList)
                 }
+            }
+            _totalCount.update {
+                searchResult.totalCount
             }
         })
     }
@@ -77,6 +83,7 @@ class BookViewModel @Inject constructor(
                     page = currentPage
                 )
             }
+            is UiEvent.Refresh -> {}
         }
     }
 

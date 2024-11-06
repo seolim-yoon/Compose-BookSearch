@@ -12,3 +12,9 @@ data class BookUiModel(
     val thumbnail: String,
     val status: String
 )
+
+data class SearchResultUiModel(
+    val bookList: List<BookUiModel> = listOf(),
+    val totalCount: Int = 0
+)
+

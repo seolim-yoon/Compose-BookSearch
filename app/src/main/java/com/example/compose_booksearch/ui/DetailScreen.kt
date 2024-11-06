@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,33 +23,37 @@ import com.example.compose_booksearch.util.ScreenType
 internal fun DetailScreen(
     book: ScreenType.DetailScreen
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_8dp)),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
+            .verticalScroll(scrollState)
             .padding(dimensionResource(R.dimen.padding_16dp))
     ) {
         AsyncImageItem(
             imgUrl = book.imageUrl,
-            modifier = Modifier.aspectRatio(1f)
+            modifier = Modifier.aspectRatio(3f / 4f)
+                .padding(dimensionResource(R.dimen.padding_24dp))
         )
         Text(
             text = book.title,
-            style = BookProgramAppTheme.typography.title18,
+            style = BookProgramAppTheme.typography.title24,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
 
         Text(
             text = book.authors,
-            style = BookProgramAppTheme.typography.title16,
+            style = BookProgramAppTheme.typography.title20,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
 
         Text(
             text = book.contents,
-            style = BookProgramAppTheme.typography.body14,
+            style = BookProgramAppTheme.typography.body18,
         )
     }
 }

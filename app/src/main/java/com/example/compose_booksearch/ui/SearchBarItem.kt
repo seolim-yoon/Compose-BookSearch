@@ -39,7 +39,10 @@ internal fun SearchBarItem(
     Row(
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_8dp)),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(dimensionResource(R.dimen.padding_12dp))
+        modifier = Modifier.padding(
+            horizontal = dimensionResource(R.dimen.padding_12dp),
+            vertical = dimensionResource(R.dimen.padding_8dp)
+        )
     ) {
         OutlinedTextField(
             value = inputText,
