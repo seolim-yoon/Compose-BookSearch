@@ -1,5 +1,6 @@
-package com.example.compose_booksearch.ui
+package com.example.compose_booksearch.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.layout.Arrangement
@@ -20,12 +21,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose_booksearch.BookViewModel
 import com.example.compose_booksearch.LoadState
 import com.example.compose_booksearch.R
+import com.example.compose_booksearch.ui.effect.Effect
+import com.example.compose_booksearch.ui.item.BookItem
+import com.example.compose_booksearch.ui.item.SearchBarItem
+import com.example.compose_booksearch.ui.item.TotalCountItem
 import com.example.compose_booksearch.ui.event.UiEvent
 import com.example.compose_booksearch.uimodel.BookUiModel
 
@@ -36,8 +42,18 @@ internal fun SearchBookScreen(
 ) {
     val viewModel: BookViewModel = hiltViewModel()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val effectFlow = viewModel.effect
 
+    val context = LocalContext.current
     var inputKeyword by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        effectFlow.collect { effect ->
+            when(effect) {
+                is Effect.Toast -> Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_8dp)),

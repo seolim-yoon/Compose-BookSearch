@@ -1,4 +1,4 @@
-package com.example.compose_booksearch.ui
+package com.example.compose_booksearch.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +15,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.compose_booksearch.R
+import com.example.compose_booksearch.ui.item.AsyncImageItem
 import com.example.compose_booksearch.ui.theme.BookProgramAppTheme
 import com.example.compose_booksearch.ui.theme.ComposeBookSearchTheme
 import com.example.compose_booksearch.util.ScreenType

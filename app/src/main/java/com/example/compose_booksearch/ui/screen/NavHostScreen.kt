@@ -1,4 +1,4 @@
-package com.example.compose_booksearch.ui
+package com.example.compose_booksearch.ui.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

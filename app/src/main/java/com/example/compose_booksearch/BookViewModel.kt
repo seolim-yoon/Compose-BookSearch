@@ -1,9 +1,9 @@
 package com.example.compose_booksearch
 
 import com.example.compose_booksearch.base.BaseViewModel
-import com.example.compose_booksearch.base.UiState
 import com.example.compose_booksearch.mapper.BookUiMapper
 import com.example.compose_booksearch.ui.event.UiEvent
+import com.example.compose_booksearch.ui.state.UiState
 import com.example.compose_booksearch.uimodel.BookUiModel
 import com.example.compose_booksearch.util.PAGE_SIZE
 import com.example.domain.usecase.SearchBookUseCase
@@ -27,7 +27,9 @@ class BookViewModel @Inject constructor(
     private val searchBookUseCase: SearchBookUseCase,
     private val bookUiMapper: BookUiMapper
 ) : BaseViewModel<BookUiState>() {
+
     override fun createInitialState(): BookUiState = BookUiState()
+
     override fun handleException(throwable: Throwable) {
         setState {
             copy(

@@ -1,4 +1,4 @@
-package com.example.compose_booksearch.ui
+package com.example.compose_booksearch.ui.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -48,6 +48,7 @@ internal fun SearchBarItem(
             value = inputText,
             onValueChange = onValueChange,
             singleLine = true,
+            shape = RoundedCornerShape(dimensionResource(R.dimen.radius_12dp)),
             placeholder = {
                 Text(
                     text = stringResource(R.string.search_place_holder)

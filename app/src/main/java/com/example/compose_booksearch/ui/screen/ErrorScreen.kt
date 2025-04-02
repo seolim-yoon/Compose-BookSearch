@@ -1,4 +1,4 @@
-package com.example.compose_booksearch.ui
+package com.example.compose_booksearch.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
