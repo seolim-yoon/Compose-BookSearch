@@ -71,9 +71,6 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.coil.compose)
     implementation(libs.navigation)
-    implementation(libs.mvi.mavericks)
-    implementation(libs.mvi.mavericks.hilt)
-    implementation(libs.mvi.mavericks.compose)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

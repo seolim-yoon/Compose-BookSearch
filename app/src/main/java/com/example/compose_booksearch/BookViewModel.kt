@@ -1,25 +1,14 @@
 package com.example.compose_booksearch
 
-import com.airbnb.mvrx.MavericksState
-import com.airbnb.mvrx.MavericksViewModel
-import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.hilt.AssistedViewModelFactory
-import com.airbnb.mvrx.hilt.hiltMavericksViewModelFactory
+import com.example.compose_booksearch.base.BaseViewModel
+import com.example.compose_booksearch.base.UiState
 import com.example.compose_booksearch.mapper.BookUiMapper
+import com.example.compose_booksearch.ui.event.UiEvent
 import com.example.compose_booksearch.uimodel.BookUiModel
 import com.example.compose_booksearch.util.PAGE_SIZE
 import com.example.domain.usecase.SearchBookUseCase
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.launch
-
-sealed interface UiEvent {
-    data class SearchBook(val keyword: String) : UiEvent
-    data object Refresh : UiEvent
-    data object LoadMore : UiEvent
-}
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 sealed interface LoadState {
     data object Loading : LoadState
@@ -31,22 +20,21 @@ data class BookUiState(
     val loadState: LoadState = LoadState.Success,
     val totalCount: Int = 0,
     val bookList: List<BookUiModel> = emptyList()
-) : MavericksState
+) : UiState
 
-class BookViewModel @AssistedInject constructor(
-    @Assisted initialState: BookUiState,
+@HiltViewModel
+class BookViewModel @Inject constructor(
     private val searchBookUseCase: SearchBookUseCase,
     private val bookUiMapper: BookUiMapper
-) : MavericksViewModel<BookUiState>(initialState) {
-
-    private fun exceptionHandler(): CoroutineExceptionHandler =
-        CoroutineExceptionHandler { _, throwable ->
-            setState {
-                copy(
-                    loadState = LoadState.Error(throwable)
-                )
-            }
+) : BaseViewModel<BookUiState>() {
+    override fun createInitialState(): BookUiState = BookUiState()
+    override fun handleException(throwable: Throwable) {
+        setState {
+            copy(
+                loadState = LoadState.Error(throwable)
+            )
         }
+    }
 
     private var currentPage = 1
     private var currentKeyword = ""
@@ -92,21 +80,19 @@ class BookViewModel @AssistedInject constructor(
             ).bookList
 
             if (moreBookList.isNotEmpty()) {
-                withState { state ->
-                    setState {
-                        copy(
-                            loadState = LoadState.Success,
-                            bookList = state.bookList.toMutableList().apply {
-                                addAll(moreBookList)
-                            }
-                        )
-                    }
+                setState {
+                    copy(
+                        loadState = LoadState.Success,
+                        bookList = bookList.toMutableList().apply {
+                            addAll(moreBookList)
+                        }
+                    )
                 }
             }
         })
     }
 
-    fun onEvent(event: UiEvent) {
+    override fun onEvent(event: UiEvent) {
         when (event) {
             is UiEvent.SearchBook -> {
                 searchBookByName(keyword = event.keyword)
@@ -121,19 +107,4 @@ class BookViewModel @AssistedInject constructor(
             }
         }
     }
-
-    private fun viewModelLaunch(onSuccess: suspend () -> Unit) {
-        viewModelScope.launch(
-            context = exceptionHandler()
-        ) {
-            onSuccess.invoke()
-        }
-    }
-
-    @AssistedFactory
-    interface Factory : AssistedViewModelFactory<BookViewModel, BookUiState> {
-        override fun create(state: BookUiState): BookViewModel
-    }
-
-    companion object : MavericksViewModelFactory<BookViewModel, BookUiState> by hiltMavericksViewModelFactory()
 }

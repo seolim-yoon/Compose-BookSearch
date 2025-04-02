@@ -21,12 +21,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import com.airbnb.mvrx.compose.collectAsState
-import com.airbnb.mvrx.compose.mavericksViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.compose_booksearch.BookViewModel
 import com.example.compose_booksearch.LoadState
 import com.example.compose_booksearch.R
-import com.example.compose_booksearch.UiEvent
+import com.example.compose_booksearch.ui.event.UiEvent
 import com.example.compose_booksearch.uimodel.BookUiModel
 
 @Composable
@@ -34,10 +34,8 @@ internal fun SearchBookScreen(
     onClickBookItem:(BookUiModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val viewModel: BookViewModel = mavericksViewModel()
-    val state by viewModel.collectAsState()
-    val onEvent = viewModel::onEvent
-
+    val viewModel: BookViewModel = hiltViewModel()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     var inputKeyword by remember { mutableStateOf("") }
 
@@ -48,7 +46,7 @@ internal fun SearchBookScreen(
         SearchBarItem(
             inputText = inputKeyword,
             onValueChange = { inputKeyword = it },
-            onClickSearchBtn = { keyword -> onEvent(UiEvent.SearchBook(keyword)) },
+            onClickSearchBtn = { keyword -> viewModel.onEvent(UiEvent.SearchBook(keyword)) },
             onClickClearBtn = { inputKeyword = "" }
         )
 
@@ -62,8 +60,8 @@ internal fun SearchBookScreen(
             loadState = state.loadState,
             bookList = state.bookList,
             onClickBookItem = onClickBookItem,
-            loadMoreItem = { onEvent(UiEvent.LoadMore) },
-            onRefresh = { onEvent(UiEvent.Refresh) }
+            loadMoreItem = { viewModel.onEvent(UiEvent.LoadMore) },
+            onRefresh = { viewModel.onEvent(UiEvent.Refresh) }
         )
     }
 }
