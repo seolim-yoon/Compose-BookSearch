@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.example.compose_booksearch.ui.screen.NavHostScreen
+import com.example.compose_booksearch.ui.book.screen.NavHostScreen
 import com.example.compose_booksearch.ui.theme.ComposeBookSearchTheme
 import dagger.hilt.android.AndroidEntryPoint
 

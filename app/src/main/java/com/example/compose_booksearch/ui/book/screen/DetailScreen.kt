@@ -1,4 +1,4 @@
-package com.example.compose_booksearch.ui.screen
+package com.example.compose_booksearch.ui.book.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,8 +21,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.compose_booksearch.R
-import com.example.compose_booksearch.ui.event.UiEvent
-import com.example.compose_booksearch.ui.item.AsyncImageItem
+import com.example.compose_booksearch.ui.book.contract.BookUiEvent
+import com.example.compose_booksearch.ui.book.item.AsyncImageItem
 import com.example.compose_booksearch.ui.theme.BookProgramAppTheme
 import com.example.compose_booksearch.ui.theme.ComposeBookSearchTheme
 import com.example.compose_booksearch.uimodel.BookUiModel
@@ -30,7 +30,7 @@ import com.example.compose_booksearch.uimodel.BookUiModel
 @Composable
 internal fun DetailScreen(
     book: BookUiModel,
-    onEvent: (UiEvent) -> Unit
+    onEvent: (BookUiEvent) -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_8dp)),
@@ -62,7 +62,7 @@ internal fun DetailScreen(
                 contentDescription = null,
                 modifier = Modifier
                     .clickable {
-                        onEvent(UiEvent.ClickFavorite(book.id))
+                        onEvent(BookUiEvent.ClickFavorite(book.id))
                     }
                     .padding(dimensionResource(R.dimen.padding_4dp))
             )

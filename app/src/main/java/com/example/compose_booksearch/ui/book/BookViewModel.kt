@@ -1,32 +1,21 @@
-package com.example.compose_booksearch
+package com.example.compose_booksearch.ui.book
 
 import com.example.compose_booksearch.base.BaseViewModel
+import com.example.compose_booksearch.base.LoadState
 import com.example.compose_booksearch.mapper.BookUiMapper
-import com.example.compose_booksearch.ui.event.UiEvent
-import com.example.compose_booksearch.ui.state.UiState
-import com.example.compose_booksearch.uimodel.BookUiModel
+import com.example.compose_booksearch.ui.book.contract.BookUiEffect
+import com.example.compose_booksearch.ui.book.contract.BookUiEvent
+import com.example.compose_booksearch.ui.book.contract.BookUiState
 import com.example.compose_booksearch.util.PAGE_SIZE
 import com.example.domain.usecase.SearchBookUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-sealed interface LoadState {
-    data object Loading : LoadState
-    data object Success : LoadState
-    data class Error(val error: Throwable) : LoadState
-}
-
-data class BookUiState(
-    val loadState: LoadState = LoadState.Success,
-    val totalCount: Int = 0,
-    val bookList: List<BookUiModel> = emptyList()
-) : UiState
-
 @HiltViewModel
 class BookViewModel @Inject constructor(
     private val searchBookUseCase: SearchBookUseCase,
     private val bookUiMapper: BookUiMapper
-) : BaseViewModel<BookUiState>() {
+) : BaseViewModel<BookUiState, BookUiEvent, BookUiEffect>() {
 
     override fun createInitialState(): BookUiState = BookUiState()
 
@@ -112,21 +101,21 @@ class BookViewModel @Inject constructor(
         )
     }
 
-    override fun onEvent(event: UiEvent) {
+    override fun onEvent(event: BookUiEvent) {
         when (event) {
-            is UiEvent.SearchBook -> {
+            is BookUiEvent.SearchBook -> {
                 searchBookByName(keyword = event.keyword)
             }
 
-            is UiEvent.Refresh -> {
+            is BookUiEvent.Refresh -> {
                 searchBookByName(keyword = currentKeyword)
             }
 
-            is UiEvent.LoadMore -> {
+            is BookUiEvent.LoadMore -> {
                 loadMoreBookList(++currentPage)
             }
 
-            is UiEvent.ClickFavorite -> {
+            is BookUiEvent.ClickFavorite -> {
                 clickFavorite(event.bookId)
             }
         }

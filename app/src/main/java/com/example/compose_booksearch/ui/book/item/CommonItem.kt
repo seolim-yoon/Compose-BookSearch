@@ -1,4 +1,4 @@
-package com.example.compose_booksearch.ui.item
+package com.example.compose_booksearch.ui.book.item
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info

@@ -1,4 +1,4 @@
-package com.example.compose_booksearch.ui.screen
+package com.example.compose_booksearch.ui.book.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -9,7 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.example.compose_booksearch.BookViewModel
+import com.example.compose_booksearch.ui.book.BookViewModel
 import com.example.compose_booksearch.util.ScreenType
 
 @Composable
@@ -24,12 +24,12 @@ internal fun NavHostScreen(
     ) {
         composable<ScreenType.MainScreen> {
             val viewModel: BookViewModel = hiltViewModel()
-            val state by viewModel.uiState.collectAsStateWithLifecycle()
+            val state by viewModel.state.collectAsStateWithLifecycle()
 
             SearchBookScreen(
                 state = state,
                 onEvent = viewModel::onEvent,
-                effectFlow = viewModel.effect,
+                bookEffectFlow = viewModel.effect,
                 onClickBookItem = { book ->
                     navController.navigate(
                         route = ScreenType.DetailScreen(
@@ -43,7 +43,7 @@ internal fun NavHostScreen(
             val viewModel: BookViewModel = hiltViewModel(
                 viewModelStoreOwner = navController.getBackStackEntry(ScreenType.MainScreen)
             )
-            val state by viewModel.uiState.collectAsStateWithLifecycle()
+            val state by viewModel.state.collectAsStateWithLifecycle()
             val bookId = it.toRoute<ScreenType.DetailScreen>().id
 
             state.bookList.find { it.id == bookId }?.let { bookUiModel ->

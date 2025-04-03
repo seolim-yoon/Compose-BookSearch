@@ -1,4 +1,4 @@
-package com.example.compose_booksearch.ui.item
+package com.example.compose_booksearch.ui.book.item
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

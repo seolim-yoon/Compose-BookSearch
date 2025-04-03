@@ -1,4 +1,4 @@
-package com.example.compose_booksearch.ui.screen
+package com.example.compose_booksearch.ui.book.screen
 
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -23,14 +23,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
-import com.example.compose_booksearch.BookUiState
-import com.example.compose_booksearch.LoadState
+import com.example.compose_booksearch.ui.book.contract.BookUiState
 import com.example.compose_booksearch.R
-import com.example.compose_booksearch.ui.effect.Effect
-import com.example.compose_booksearch.ui.event.UiEvent
-import com.example.compose_booksearch.ui.item.BookItem
-import com.example.compose_booksearch.ui.item.SearchBarItem
-import com.example.compose_booksearch.ui.item.TotalCountItem
+import com.example.compose_booksearch.base.LoadState
+import com.example.compose_booksearch.ui.book.contract.BookUiEffect
+import com.example.compose_booksearch.ui.book.contract.BookUiEvent
+import com.example.compose_booksearch.ui.book.item.BookItem
+import com.example.compose_booksearch.ui.book.item.SearchBarItem
+import com.example.compose_booksearch.ui.book.item.TotalCountItem
 import com.example.compose_booksearch.uimodel.BookUiModel
 import com.example.compose_booksearch.util.BOOK_ITEM_TYPE
 import kotlinx.coroutines.flow.Flow
@@ -38,8 +38,8 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 internal fun SearchBookScreen(
     state: BookUiState,
-    onEvent: (UiEvent) -> Unit,
-    effectFlow: Flow<Effect>,
+    onEvent: (BookUiEvent) -> Unit,
+    bookEffectFlow: Flow<BookUiEffect>,
     onClickBookItem:(BookUiModel) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -47,9 +47,9 @@ internal fun SearchBookScreen(
     var inputKeyword by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        effectFlow.collect { effect ->
+        bookEffectFlow.collect { effect ->
             when(effect) {
-                is Effect.Toast -> Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
+                is BookUiEffect.Toast -> Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -61,7 +61,7 @@ internal fun SearchBookScreen(
         SearchBarItem(
             inputText = inputKeyword,
             onValueChange = { inputKeyword = it },
-            onClickSearchBtn = { keyword -> onEvent(UiEvent.SearchBook(keyword)) },
+            onClickSearchBtn = { keyword -> onEvent(BookUiEvent.SearchBook(keyword)) },
             onClickClearBtn = { inputKeyword = "" }
         )
 
@@ -75,9 +75,9 @@ internal fun SearchBookScreen(
             loadState = state.loadState,
             bookList = state.bookList,
             onClickBookItem = onClickBookItem,
-            onClickFavorite = { onEvent(UiEvent.ClickFavorite(it.id)) },
-            loadMoreItem = { onEvent(UiEvent.LoadMore) },
-            onRefresh = { onEvent(UiEvent.Refresh) }
+            onClickFavorite = { onEvent(BookUiEvent.ClickFavorite(it.id)) },
+            loadMoreItem = { onEvent(BookUiEvent.LoadMore) },
+            onRefresh = { onEvent(BookUiEvent.Refresh) }
         )
     }
 }
