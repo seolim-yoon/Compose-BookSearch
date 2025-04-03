@@ -8,9 +8,6 @@ sealed interface ScreenType {
 
     @Serializable
     data class DetailScreen(
-        val imageUrl: String,
-        val title: String,
-        val authors: String,
-        val contents: String
+        val id: Int
     ): ScreenType
 }

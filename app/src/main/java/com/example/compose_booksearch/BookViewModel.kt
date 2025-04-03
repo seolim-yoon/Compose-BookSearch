@@ -94,6 +94,24 @@ class BookViewModel @Inject constructor(
         })
     }
 
+    private fun clickFavorite(bookId: Int) {
+        viewModelLaunch(
+            onSuccess = {
+                setState {
+                    copy(
+                        bookList = bookList.map { item ->
+                            if (item.id == bookId) {
+                                item.copy(
+                                    isFavorite = !item.isFavorite
+                                )
+                            } else item
+                        }
+                    )
+                }
+            }
+        )
+    }
+
     override fun onEvent(event: UiEvent) {
         when (event) {
             is UiEvent.SearchBook -> {
@@ -106,6 +124,10 @@ class BookViewModel @Inject constructor(
 
             is UiEvent.LoadMore -> {
                 loadMoreBookList(++currentPage)
+            }
+
+            is UiEvent.ClickFavorite -> {
+                clickFavorite(event.bookId)
             }
         }
     }

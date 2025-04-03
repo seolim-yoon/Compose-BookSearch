@@ -10,7 +10,8 @@ data class BookUiModel(
     val price: Int,
     val salePrice: Int,
     val thumbnail: String,
-    val status: String
+    val status: String,
+    val isFavorite: Boolean
 )
 
 data class SearchResultUiModel(

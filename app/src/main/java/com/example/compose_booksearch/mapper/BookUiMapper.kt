@@ -24,7 +24,8 @@ class BookUiMapper @Inject constructor() {
                 price = book.price,
                 salePrice = book.salePrice,
                 thumbnail = book.thumbnail,
-                status = book.status
+                status = book.status,
+                isFavorite = false
             )
         }
 }
