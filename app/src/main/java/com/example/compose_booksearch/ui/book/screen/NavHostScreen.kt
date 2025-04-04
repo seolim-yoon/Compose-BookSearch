@@ -29,16 +29,17 @@ internal fun NavHostScreen(
             SearchBookScreen(
                 state = state,
                 onEvent = viewModel::onEvent,
-                bookEffectFlow = viewModel.effect,
-                onClickBookItem = { book ->
+                effectFlow = viewModel.effect,
+                onNavigationRequested = { effect ->
                     navController.navigate(
                         route = ScreenType.DetailScreen(
-                            id = book.id
+                            id = effect.bookId
                         )
                     )
                 }
             )
         }
+
         composable<ScreenType.DetailScreen> {
             val viewModel: BookViewModel = hiltViewModel(
                 viewModelStoreOwner = navController.getBackStackEntry(ScreenType.MainScreen)

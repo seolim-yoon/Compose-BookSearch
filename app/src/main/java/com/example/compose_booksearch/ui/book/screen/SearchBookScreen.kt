@@ -39,16 +39,17 @@ import kotlinx.coroutines.flow.Flow
 internal fun SearchBookScreen(
     state: BookUiState,
     onEvent: (BookUiEvent) -> Unit,
-    bookEffectFlow: Flow<BookUiEffect>,
-    onClickBookItem:(BookUiModel) -> Unit,
+    effectFlow: Flow<BookUiEffect>,
+    onNavigationRequested: (effect: BookUiEffect.NavigateToDetail) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     var inputKeyword by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        bookEffectFlow.collect { effect ->
+        effectFlow.collect { effect ->
             when(effect) {
+                is BookUiEffect.NavigateToDetail -> onNavigationRequested(effect)
                 is BookUiEffect.Toast -> Toast.makeText(context, effect.msg, Toast.LENGTH_SHORT).show()
             }
         }
@@ -74,7 +75,7 @@ internal fun SearchBookScreen(
         BookList(
             loadState = state.loadState,
             bookList = state.bookList,
-            onClickBookItem = onClickBookItem,
+            onClickBookItem = { onEvent(BookUiEvent.NavigateToDetail(it.id)) },
             onClickFavorite = { onEvent(BookUiEvent.ClickFavorite(it.id)) },
             loadMoreItem = { onEvent(BookUiEvent.LoadMore) },
             onRefresh = { onEvent(BookUiEvent.Refresh) }

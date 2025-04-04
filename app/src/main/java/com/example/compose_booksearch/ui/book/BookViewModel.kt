@@ -103,6 +103,12 @@ class BookViewModel @Inject constructor(
 
     override fun onEvent(event: BookUiEvent) {
         when (event) {
+            is BookUiEvent.NavigateToDetail -> {
+                setEffect {
+                    BookUiEffect.NavigateToDetail(event.bookId)
+                }
+            }
+
             is BookUiEvent.SearchBook -> {
                 searchBookByName(keyword = event.keyword)
             }
