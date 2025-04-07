@@ -1,6 +1,6 @@
 package com.example.data.datasource.remote
 
-import com.example.data.api.BookServiceApi
+import com.example.data.datasource.remote.api.BookServiceApi
 import com.example.data.dto.BookDTO
 import javax.inject.Inject
 

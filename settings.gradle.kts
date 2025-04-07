@@ -22,4 +22,3 @@ dependencyResolutionManagement {
 rootProject.name = "Compose-BookSearch"
 include(":app")
 include(":data")
-include(":domain")

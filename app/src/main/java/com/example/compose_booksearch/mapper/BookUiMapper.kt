@@ -2,17 +2,17 @@ package com.example.compose_booksearch.mapper
 
 import com.example.compose_booksearch.uimodel.BookUiModel
 import com.example.compose_booksearch.uimodel.SearchResultUiModel
-import com.example.domain.entity.BookEntity
+import com.example.data.dto.BookDTO
 import javax.inject.Inject
 
 class BookUiMapper @Inject constructor() {
-    fun mapToSearchResultUiModel(document: BookEntity): SearchResultUiModel =
+    fun mapToSearchResultUiModel(document: BookDTO): SearchResultUiModel =
         SearchResultUiModel(
             bookList = mapToBookUiModelList(document.documents),
             totalCount = document.meta.totalCount
 
         )
-    private fun mapToBookUiModelList(bookEntityList: List<BookEntity.BookDocumentEntity>): List<BookUiModel> =
+    private fun mapToBookUiModelList(bookEntityList: List<BookDTO.BookDocument>): List<BookUiModel> =
         bookEntityList.mapIndexed { index, book ->
             BookUiModel(
                 id = index,

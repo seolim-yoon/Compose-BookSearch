@@ -15,10 +15,12 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -67,6 +69,7 @@ internal fun BookItem(
                 Icon(
                     imageVector = if (book.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = null,
+                    tint = if (book.isFavorite) Color.Red else LocalContentColor.current,
                     modifier = Modifier
                         .clickable {
                             onClickFavorite(book)
@@ -174,7 +177,7 @@ private fun PreviewBookItem() {
                 salePrice = 13500,
                 thumbnail = "https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788936434120.jpg",
                 status = "판매중",
-                isFavorite = false
+                isFavorite = true
             ),
             onClickBookItem = {},
             onClickFavorite = {}

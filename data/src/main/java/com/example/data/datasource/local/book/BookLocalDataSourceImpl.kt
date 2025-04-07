@@ -1,4 +1,4 @@
-package com.example.data.datasource.local
+package com.example.data.datasource.local.book
 
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.example.data.api
+package com.example.data.datasource.remote.api
 
 import com.example.data.dto.BookDTO
 import retrofit2.http.GET

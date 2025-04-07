@@ -7,13 +7,13 @@ import com.example.compose_booksearch.ui.book.contract.BookUiEffect
 import com.example.compose_booksearch.ui.book.contract.BookUiEvent
 import com.example.compose_booksearch.ui.book.contract.BookUiState
 import com.example.compose_booksearch.util.PAGE_SIZE
-import com.example.domain.usecase.SearchBookUseCase
+import com.example.data.repository.BookRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class BookViewModel @Inject constructor(
-    private val searchBookUseCase: SearchBookUseCase,
+    private val bookRepository: BookRepository,
     private val bookUiMapper: BookUiMapper
 ) : BaseViewModel<BookUiState, BookUiEvent, BookUiEffect>() {
 
@@ -43,7 +43,7 @@ class BookViewModel @Inject constructor(
             currentKeyword = keyword
 
             val searchResult = bookUiMapper.mapToSearchResultUiModel(
-                searchBookUseCase(
+                bookRepository.searchBooksByName(
                     keyword = keyword,
                     page = currentPage,
                     pageSize = PAGE_SIZE
@@ -63,7 +63,7 @@ class BookViewModel @Inject constructor(
     private fun loadMoreBookList(page: Int) {
         viewModelLaunch(onSuccess = {
             val moreBookList = bookUiMapper.mapToSearchResultUiModel(
-                searchBookUseCase(
+                bookRepository.searchBooksByName(
                     keyword = currentKeyword,
                     page = page,
                     pageSize = PAGE_SIZE
